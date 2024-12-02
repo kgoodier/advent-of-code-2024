@@ -17,17 +17,31 @@ func main() {
 		panic(errors.New("invalid input"))
 	}
 
-	slices.Sort(data[0])
-	slices.Sort(data[1])
+	list1 := data[0]
+	list2 := data[1]
 
+	slices.Sort(list1)
+	slices.Sort(list2)
+
+	// Part 1
 	d := 0
-	for i := 0; i < len(data[0]); i++ {
-		if data[0][i] < data[1][i] {
-			d += data[1][i] - data[0][i]
+	for i := 0; i < len(list1); i++ {
+		if list1[i] < list2[i] {
+			d += list2[i] - list1[i]
 		} else {
-			d += data[0][i] - data[1][i]
+			d += list1[i] - list2[i]
 		}
 	}
-
 	fmt.Println(d)
+
+	// Part 2
+	counts := map[int]int{}
+	for _, v := range list2 {
+		counts[v]++
+	}
+	s := 0
+	for _, v := range list1 {
+		s += v * counts[v]
+	}
+	fmt.Println(s)
 }
