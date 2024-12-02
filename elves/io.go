@@ -45,3 +45,27 @@ func ReadColumns[T any](filename string, fn Converter[T]) ([][]T, error) {
 
 	return columns, nil
 }
+
+func ReadRows[T any](filename string, fn Converter[T]) ([][]T, error) {
+	lines, err := ReadLines(filename)
+	if err != nil {
+		return nil, err
+	}
+
+	rows := [][]T{}
+	for r := range lines {
+		cols := strings.Fields(lines[r])
+		row := make([]T, len(cols))
+
+		for c := range cols {
+			val, err := fn(r, c, cols[c])
+			if err != nil {
+				return nil, err
+			}
+			row[c] = val
+		}
+		rows = append(rows, row)
+	}
+
+	return rows, nil
+}
